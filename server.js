@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 // db config
 const db = "mongodb+srv://shreya:shreya072@cluster0-2jhoj.mongodb.net/test?retryWrites=true&w=majority";
 
-mongoose.connect(db,{useNewUrlParser: true})
+mongoose.connect(db,{useNewUrlParser: true, useUnifiedTopology: true })
 .then(
     ()=>{console.log("database connected")},
     err=>{console.log('error',err)}
