@@ -14,7 +14,7 @@ mongoose.connect(db,{useNewUrlParser: true, useUnifiedTopology: true })
 .then(
     ()=>{console.log("database connected")},
     err=>{console.log('error',err)}
-)
+);
 
 app.use('/products',productRoutes);
 
