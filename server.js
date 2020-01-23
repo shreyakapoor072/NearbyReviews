@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');// to work on mongodb
 const bodyParser = require('body-parser');
 const productRoutes = require('./routes/Product');
+const userRoutes = require('./routes/Users');
 
 const app = express();
 
@@ -17,6 +18,7 @@ mongoose.connect(db,{useNewUrlParser: true})
 )
 
 app.use('/products',productRoutes);
+app.use('/users',userRoutes);
 
 const PORT = 5000;
 app.listen(PORT,()=>console.log('Server started'));
