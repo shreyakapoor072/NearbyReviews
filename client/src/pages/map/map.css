@@ -1,0 +1,8 @@
+.map-container{
+    position: static !important;
+}
+.chat-with-user{
+    color: blue;
+    margin-left: 5px;
+    font-size: 16px;
+}
