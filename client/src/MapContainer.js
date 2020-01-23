@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import { fetchUser, fetchRecentBuyers } from './api';
+
 
 export class MapContainer extends Component{
     constructor(props){
@@ -41,7 +43,13 @@ export class MapContainer extends Component{
             showingInfoWindow: false
             });
     };
-   
+
+    componentDidMount() {
+         fetchRecentBuyers('675147979657').then(data => {
+             console.log(data);
+         })
+    }
+    
     render(){
         return (<div>
             <Map style={{
