@@ -4,6 +4,7 @@ import {
   Route
 } from "react-router-dom";
 import Chat from "./pages/chat/chat";
+import MapContainer from './pages/map/MapContainer';
 
 export class RouteHandler extends Component {
 
@@ -13,7 +14,7 @@ export class RouteHandler extends Component {
                     <Route
                         exact
                         path="/Map"
-                        // component={}
+                        component={MapContainer}
                     />
                     <Route
                         path="/Chat"

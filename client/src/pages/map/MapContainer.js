@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import './map.css';
 
 export class MapContainer extends Component{
     constructor(props){
@@ -8,6 +9,9 @@ export class MapContainer extends Component{
             showingInfoWindow: false,
             activeMarker : {},
             selectedPlace : {}
+        }
+        this.blueDotIcon = {
+            url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
         }
         this.points = [
             { lat: 42.02, lng: -77.01 },
@@ -42,13 +46,17 @@ export class MapContainer extends Component{
             });
     };
    
+    getUserInitials(fullName){
+        let names = fullName.split(' ');
+        let initials = '';
+        names.forEach((item)=>{
+            initials += item[0]
+        })
+        return initials.toUpperCase();
+    }
     render(){
-        return (<div>
-            <Map style={{
-                    maxWidth: "300px",
-                    maxHeight: "300px",
-                    margin: "30px 10px"
-                }}
+        return (<div >
+            <Map className='map-container'
                 google={this.props.google}
                 zoom={10}
                 initialCenter={{
@@ -59,12 +67,14 @@ export class MapContainer extends Component{
                  >
                 <Marker
                     onClick={this.onMarkerClick}
-                    name={"Current Location"}
-                    
+                    name={"Chat With kshitiz rohatgi"}
+                    label={this.getUserInitials("kshitiz rohatgi")}
+                    icon={this.blueDotIcon}
                 />
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
                     <div>
-                        <h1>{this.state.selectedPlace.name}</h1>
+                        <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
+                        <a href="#" class="chat-with-user">{this.state.selectedPlace.name}</a>
                     </div>
                 </InfoWindow>
             </Map>
