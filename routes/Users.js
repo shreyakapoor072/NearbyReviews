@@ -1,23 +1,25 @@
 const express = require('express');
 var router = express.Router();
-const Product = require('../models/Product');
+const Users = require('../models/Users');
 
 router.get('/',(req,res)=>{
-    Product.find()
+    Users.find()
     .then(items => res.json(items));
 })
 
 router.post('/',(req,res)=>{
-    const { name, pid, category, price, recentlyPurchasedUsers } = req.body;
-    const newproduct = new Product({
+    const { name, userId, email, lat, long, pincode } = req.body
+    const newUser = new Users({
         name,
-        pid,
-        price,
-        category,
-        recentlyPurchasedUsers
+        userId,
+        email,
+        lat,
+        long,
+        lat,
+        pincode,
     })
 
-    newproduct.save()
+    newUser.save()
     .then(prod => res.json(prod))
     .catch(err=>res.send(false))
 })

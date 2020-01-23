@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');// to work on mongodb
 const bodyParser = require('body-parser');
 const productRoutes = require('./routes/Product');
+const userRoutes = require('./routes/Users');
 const app = express();
 const socketio = require('socket.io');
 
@@ -17,6 +18,7 @@ mongoose.connect(db,{useNewUrlParser: true, useUnifiedTopology: true })
 );
 
 app.use('/products',productRoutes);
+app.use('/users',userRoutes);
 
 
 

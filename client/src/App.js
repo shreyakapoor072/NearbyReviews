@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
-import Chat from './pages/chat/chat';
+import { RouteHandler } from './RouteHandler';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <Chat />
+    <div className="nearbuyCont">
+      <Router>
+        <RouteHandler  />
+      </Router>
     </div>
   );
 }

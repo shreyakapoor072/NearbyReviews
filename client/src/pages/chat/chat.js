@@ -9,6 +9,7 @@ export default class Chat extends Component{
         this.state = {
             connected: false
         }
+        console.log(props);
     }
 
     componentDidMount() {
