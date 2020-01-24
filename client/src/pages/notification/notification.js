@@ -2,22 +2,14 @@ import React, { Component } from 'react';
 import './notification.css';
 
 export default class Notification extends Component{
-    constructor(props){
-        super(props);
-    }
-
-    componentDidMount() {
-        
-    }
 
     render(){
         return <>
         <div className="header">
             <ul>
-                <li>&lt;Back</li>
+                <li><a href={`https://m.snapdeal.com/`}>&lt;&nbsp;Back</a></li>
                 <li>Notification</li>
                 <li></li>
-
             </ul>
         </div>
         <div className="notify">
