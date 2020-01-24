@@ -25,18 +25,28 @@ router.post('/',(req,res)=>{
     .catch(err=>res.send(false))
 })
 
-router.put('/:id', (req,res) => {
-    const id = req.params.id;
+router.put('/snapcash/:rid/:uid', (req,res) => {
+    const rid  = req.params.rid;
+    const uid = req.params.uid;
+
     
-    Users.findByIdAndUpdate({userId: id}, {snapcash: req.body.snapcash}, function(err, user){
+    Users.findOneAndUpdate({userId: rid}, {snapcash: req.body.reviewerSC + 2}).then((err, user)=>{
         if (err) { 
             console.log("error"); 
         } else {
             console.log(user);
         }
-
-
+    }).then(() => {
+        Users.findOneAndUpdate({userId: uid}, {snapcash: req.body.userSC - 2}).then((err, user) => {
+            if (err) { 
+                console.log("error"); 
+            } else {
+                console.log(user);
+            }
+        }).then(() => res.json({status: 'true'}));
     })
+
+    
 })
 
 

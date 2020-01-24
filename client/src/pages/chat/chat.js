@@ -16,7 +16,7 @@ export default class Chat extends Component {
         this.sendMesage = this.sendMesage.bind(this);
         this.deductSnapCash = this.deductSnapCash.bind(this);
         this.setUserDetails();
-        const {pogId , userId, buyerId} = this.getParams(this.props)
+        const {pogId, userId, buyerId} = this.getParams(this.props)
         this.pogId = pogId;
         this.currUserId = userId;
         this.buyerId = buyerId;
@@ -62,10 +62,11 @@ export default class Chat extends Component {
             try{
                 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 const buyerInfo = JSON.parse(localStorage.getItem('buyerInfo'));
-                console.log(buyerInfo);
                 this.currentUserData = {
-                    snapcash : userInfo.snapcash,
-                    userId: userInfo.userId
+                    userSC : userInfo.snapcash,
+                    reviewerSC:  buyerInfo.snapcash,
+                    userId: userInfo.userId,
+                    reviewerId: buyerInfo.userId
                 }
             } catch(e){
                 console.warn(e);
@@ -73,12 +74,11 @@ export default class Chat extends Component {
         }
     }
     deductSnapCash() {
-        const { snapcash, userId} = this.currentUserData;
-        console.log(snapcash);
-        if(snapcash < 2) {
+        const { userSC } = this.currentUserData;
+        if(userSC < 2) {
             alert('you have low snapcash');
         } else {
-            updateSnapcash({userId});
+            updateSnapcash(this.currentUserData);
         }
         this.setState({
             showDialog: false
@@ -93,7 +93,7 @@ export default class Chat extends Component {
             html = <div className="modal">
             <h3>Do you want to proceed?</h3>
             <p>Please note: Your 2 snapcoins will be deducted from your wallet and will be transferred to your chat buddy if you wish to proceed</p>
-            <h4> Current Snapcash Balance: Rs {this.currentUserData && this.currentUserData.snapcash}</h4>
+            <h4> Current Snapcash Balance: Rs {this.currentUserData && this.currentUserData.userSC}</h4>
             <button onClick={this.deductSnapCash}>Pay and Proceed</button>
             <button onClick={() => {
                 this.props.history.goBack()
