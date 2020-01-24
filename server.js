@@ -22,7 +22,7 @@ app.use('/users',userRoutes);
 
 
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT,()=>console.log('Server started'));
 const io = socketio(server);
 

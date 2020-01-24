@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-import { fetchUser, fetchRecentBuyers, fetchUsers } from '../../api';
+import { fetchRecentBuyers, fetchUsers } from '../../api';
 import queryString from 'query-string';
 
 import './map.css';
+import { userInfo } from 'os';
 
 export class MapContainer extends Component{
     constructor(props){
@@ -12,7 +13,8 @@ export class MapContainer extends Component{
         this.state ={
             showingInfoWindow: false,
             activeMarker : {},
-            selectedPlace : {}
+            selectedPlace : {},
+            markerData: []
         }
         this.blueDotIcon = {
             url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
@@ -56,7 +58,6 @@ export class MapContainer extends Component{
             let url = this.props.location.search;
             params = queryString.parse(url);
         }
-        console.log(params);
         return params;
     }
 
@@ -64,38 +65,35 @@ export class MapContainer extends Component{
         //fetch pog id from url remove this hardcoded one
         const { pogId, userId } = this.setParams(this.props);
 
-       /* fetchRecentBuyers(pogId).then((data) => {
-            let usersIds = data;
-            if(usersIds.indexOf(parseInt(userId)) === -1){ 
-                usersIds.push(parseInt(userId));
-            }
-            fetchUsers().then(userData => {
-                
-            })
-        })*/
+        const userData = this.getRecentBuyers();
 
-       
+        this.setState({
+            markerData: userData
+        })
 
     }
 
     async getRecentBuyers() {
         const { pogId, userId } = this.setParams(this.props);
-        let userIds;
+        let userIds, userData;
        await fetchRecentBuyers(pogId).then( data => {
            userIds = data
         })
 
-        if(userIds.indexOf(userId) === -1){
+        if(userIds.indexOf(parseInt(userId)) === -1){
             userIds.push(userId);
         }
 
-        fetchUsers().then(data => {
-            console.log(data);
+        await fetchUsers().then(userInfo => {
+            userData = userInfo.filter(item => {
+                if(userIds.indexOf(item.userId) !== -1) {
+                    return item
+                }
+            })
         })
 
+        return userData;
 
-
-        console.log(userIds)
     }
     
    
@@ -107,7 +105,9 @@ export class MapContainer extends Component{
         })
         return initials.toUpperCase();
     }
+
     render(){
+        const { markerData} = this.state;
         return (<div >
             <Map className='map-container'
                 google={this.props.google}
