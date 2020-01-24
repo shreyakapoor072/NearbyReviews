@@ -62,15 +62,7 @@ export class MapContainer extends Component{
     }
 
     componentDidMount() {
-        //fetch pog id from url remove this hardcoded one
-        const { pogId, userId } = this.setParams(this.props);
-
-        const userData = this.getRecentBuyers();
-
-        this.setState({
-            markerData: userData
-        })
-
+        this.getRecentBuyers();
     }
 
     async getRecentBuyers() {
@@ -80,19 +72,21 @@ export class MapContainer extends Component{
            userIds = data
         })
 
-        if(userIds.indexOf(parseInt(userId)) === -1){
+        if(userIds && userIds.indexOf(parseInt(userId)) === -1){
             userIds.push(userId);
         }
 
         await fetchUsers().then(userInfo => {
             userData = userInfo.filter(item => {
-                if(userIds.indexOf(item.userId) !== -1) {
+                if(userIds && userIds.indexOf(item.userId) !== -1) {
                     return item
                 }
             })
         })
-
-        return userData;
+       
+        this.setState({
+            markerData: userData
+        })
 
     }
     
@@ -107,14 +101,13 @@ export class MapContainer extends Component{
     }
 
     render(){
-        const { markerData} = this.state;
         return (<div >
             <Map className='map-container'
                 google={this.props.google}
-                zoom={10}
+                zoom={13}
                 initialCenter={{
-                    lat: 40.854885,
-                    lng: -88.081807
+                    lat: 28.408561189492,
+                    lng: 77.08244685083629
                   }}
                   onClick={this.onMapClicked}
                  >
@@ -124,6 +117,7 @@ export class MapContainer extends Component{
                     label={this.getUserInitials("kshitiz rohatgi")}
                     icon={this.blueDotIcon}
                 />
+                {this.setNearbyBuyer()}
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
                     <div>
                         <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
@@ -134,16 +128,24 @@ export class MapContainer extends Component{
         </div>)
     }
     //BuyerInfo = {name, position = {lat:37, lng:122}}
-    setNearbyBuyer(buyerInfo){
+    setNearbyBuyer(){
+        let buyerInfo = this.state.markerData;
         let markers = [];
-        for(let i = 0 ; i< buyerInfo.length; i++){
-            markers.push(<Marker
-                onClick={this.onMarkerClick}
-                name={buyerInfo[i].name}
-                position= {buyerInfo[i].position}
-            />)
-        }
-        return markers
+        const markerLen = buyerInfo.length;
+        if(markerLen > 0) {
+            for(let i = 0 ; i< markerLen; i++){
+                const position = {
+                    lat: buyerInfo[i].lat,
+                    lng: buyerInfo[i].long
+                }
+                markers.push(<Marker
+                    onClick={this.onMarkerClick}
+                    name={buyerInfo[i].name}
+                    position= {position}
+                />)
+            }
+            return markers
+        }   
     }
 }
 
