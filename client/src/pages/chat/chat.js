@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import queryString from 'query-string';
 import './chat.css';
 import { updateSnapcash} from '../../api';
+import { Redirect } from 'react-router-dom';
 export default class Chat extends Component {
     constructor(props) {
         super(props);
@@ -76,12 +77,15 @@ export default class Chat extends Component {
         const { snapcash, userId} = this.currentUserData;
         console.log(snapcash);
         if(snapcash < 2) {
-            alert('you have low snapcash');
+            this.setState({
+                redirectTo:"/earnHelp"
+            })
         } else {
             updateSnapcash({userId});
         }
         this.setState({
-            showDialog: false
+            showDialog: false,
+            redirectTo:""
         })
     }
     componentWillUnmount(){
@@ -89,6 +93,10 @@ export default class Chat extends Component {
     }
     render() {
         let html;
+        let {redirectTo}=this.state;
+        if(redirectTo){
+            return <Redirect to={redirectTo} />
+        }
         if(this.state.showDialog){
             html = <div className="modal">
             <h3>Do you want to proceed?</h3>
