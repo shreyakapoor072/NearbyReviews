@@ -160,7 +160,7 @@ export class MapContainer extends Component{
                                 <ul>
                                     <a href="/chat?dialog=true"><li>Open Chat</li></a>
                                     <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
-                                    <li>Earn Snapcash</li>
+                                    <a href="/earnHelp"><li>Earn Snapcash</li></a>
                                 </ul>
                             </div>
                     </div>
