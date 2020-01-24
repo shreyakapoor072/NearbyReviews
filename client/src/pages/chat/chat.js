@@ -84,10 +84,12 @@ export default class Chat extends Component {
             })
         } else {
             updateSnapcash({userId});
+            this.setState({
+                redirectTo:""
+            })
         }
         this.setState({
             showDialog: false,
-            redirectTo:""
         })
     }
     componentWillUnmount(){
