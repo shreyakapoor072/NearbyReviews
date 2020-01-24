@@ -93,7 +93,11 @@ export class MapContainer extends Component{
        await fetchRecentBuyers(pogId).then( data => {
            userIds = data
         })
-
+        userIds = userIds.filter(item=>{
+            if(item.userId !== parseInt(currUserId)){
+                return item;
+            }
+        })
         await fetchUsers().then(userInfo => {
             userData = userInfo.filter(item => {
                 if(userIds && userIds.indexOf(item.userId) !== -1) {
