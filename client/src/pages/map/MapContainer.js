@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { fetchUser, fetchRecentBuyers } from '../../api';
+import queryString from 'query-string';
 
 import './map.css';
 
 export class MapContainer extends Component{
     constructor(props){
         super(props);
+        this.setParams(props);
         this.state ={
             showingInfoWindow: false,
             activeMarker : {},
@@ -47,6 +49,15 @@ export class MapContainer extends Component{
             showingInfoWindow: false
             });
     };
+
+    setParams(props){
+        this.params={};
+        if(props){
+            let url = this.props.location.search;
+            this.params = queryString.parse(url);
+        }
+        console.log(this.params)
+    }
 
     componentDidMount() {
         //fetch pog id from url remove this hardcoded one
