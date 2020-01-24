@@ -50,7 +50,14 @@ export class MapContainer extends Component{
             showingInfoWindow: true,
             activeMarker : marker,
             selectedPlace : props
-        })}
+        })
+        let buyerData = this.state.markerData.filter((item)=>{
+            if(item.userId === props.userId){
+                return item;
+            }
+        })
+        window.localStorage.setItem('buyerInfo', JSON.stringify(buyerData));
+    }
     
     onInfoWindowClose = () =>
     this.setState({
@@ -81,6 +88,7 @@ export class MapContainer extends Component{
 
     async getRecentBuyers() {
         const { pogId, userId : currUserId } = this.setParams(this.props);
+        this.pogId = pogId;
         let userIds, userData, currUserData;
        await fetchRecentBuyers(pogId).then( data => {
            userIds = data
@@ -104,6 +112,7 @@ export class MapContainer extends Component{
             markerData: userData, 
             currUserData: currUserData && currUserData[0]
         })
+        window.localStorage.setItem('userInfo', JSON.stringify(this.state.currUserData));
     }
     
     getUserInitials(fullName){
@@ -152,7 +161,7 @@ export class MapContainer extends Component{
                         </div>
                         <div className="infomarker__footer">
                                 <ul>
-                                    <a href="/chat?dialog=true"><li>Open Chat</li></a>
+                                    <a href={`/chat?dialog=true&pogId=${this.pogId}&userId=${this.state.currUserData.userId}`}><li>Open Chat</li></a>
                                     <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
                                     <a href="/earnHelp"><li>Earn Snapcash</li></a>
                                 </ul>
@@ -179,6 +188,7 @@ export class MapContainer extends Component{
                     position= {position}
                     label = {this.getUserInitials(buyerInfo[i].name)}
                     key ={i}
+                    userId = {buyerInfo[i].userId}
                 />)
             }
             return markers
