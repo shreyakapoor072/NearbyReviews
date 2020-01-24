@@ -38,3 +38,10 @@ export const updateSnapcash = function(data) {
     const { userId, buyerId } = data;
     return axios.put(`/users/${userId}`);
 }
+export const findByIdAndUpdateLikes = function(userid, likes){
+    return axios.put(`/users/rating/${userid}`, {likes}).then(result => {
+        return result
+    }).catch(() => {
+        return {status: false};
+    });
+}

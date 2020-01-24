@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 import './chat.css';
-import { updateSnapcash} from '../../api';
 import { Redirect } from 'react-router-dom';
+import { updateSnapcash, findByIdAndUpdateLikes} from '../../api';
 export default class Chat extends Component {
     constructor(props) {
         super(props);
@@ -11,7 +11,8 @@ export default class Chat extends Component {
             msgs: [
                 
             ],
-            showDialog: this.props.location.search.includes("dialog")? true: false
+            showDialog: this.props.location.search.includes("dialog")? true: false,
+            showRating: false
         }
         this.textarea = "";
         this.sendMesage = this.sendMesage.bind(this);
@@ -22,6 +23,7 @@ export default class Chat extends Component {
         this.currUserId = userId;
         this.buyerId = buyerId;
         this.userName = this.currUserId ?  JSON.parse(window.localStorage.getItem('buyerInfo')).name:JSON.parse(window.localStorage.getItem('userInfo')).name;
+        this.buyer = this.currUserId ? JSON.parse(window.localStorage.getItem('buyerInfo')) : null;
     }
 
     getParams(props){
@@ -107,6 +109,23 @@ export default class Chat extends Component {
                 this.props.history.goBack()
             }}>Close</button>
         </div> ;
+        }else if(this.state.showRating && this.buyer){
+            html = <div className="rating">
+                <div className="nav">
+                    <h1>How Helpful was this user?</h1>
+                </div>
+                <div className="rating-body">
+                    <h3>Click below on any button to rate your experience with the user</h3>
+                    <div className="ratingbtns">
+                        <button onClick={(e) => {
+                            findByIdAndUpdateLikes(this.buyerId, this.buyer.likes + 1).then(result => {
+                                console.log(result);
+                                window.location.href = `https://m.snapdeal.com/product/x/${this.pogId}`;
+                            });
+                        }}>Yey</button>
+                    </div>
+                </div>
+            </div>
         }else{
             html = <div className="chat">
             <h3>You are now chatting with {this.userName}</h3>
