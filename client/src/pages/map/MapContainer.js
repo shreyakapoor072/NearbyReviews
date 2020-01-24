@@ -3,7 +3,6 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { fetchRecentBuyers, fetchUsers } from '../../api';
 import queryString from 'query-string';
 import './map.css';
-import { userInfo } from 'os';
 
 export class MapContainer extends Component{
     constructor(props){
@@ -14,7 +13,8 @@ export class MapContainer extends Component{
             activeMarker : {},
             selectedPlace : {},
             apiDataFetched: false,
-            markerData: []
+            markerData: [],
+            showDialog: false
         }
         this.blueDotIcon = {
             url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
@@ -44,7 +44,12 @@ export class MapContainer extends Component{
             }
         }
     }
-    componentDidUpdate(){
+    componentDidUpdate(prevProp){
+        if(!this.state.showDialog && this.props.location.hash.includes('modal')){
+            this.setState({
+                showDialog: true
+            })
+        }
         this.getNearbyUsers(28.402184051069632,77.10499718785287, this.state.markerData , 10);
     }
     onMarkerClick= (props,marker, e) =>{
@@ -143,10 +148,6 @@ export class MapContainer extends Component{
                 />
                 {this.setNearbyBuyer()}
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
-                    {/* <div className="infomarker">
-                        <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
-                        <a href="#" className="chat-with-user">{this.state.selectedPlace.name}</a>
-                    </div> */}
                     <div className="informarker">
                         <div className="markerbox">
                             <div className="infomarker__initial">{this.getUserInitials(this.state.selectedPlace.name)}</div>
@@ -157,8 +158,8 @@ export class MapContainer extends Component{
                         </div>
                         <div className="infomarker__footer">
                                 <ul>
-                                    <a href="/chat"><li>Open Chat</li></a>
-                                    <li>View Product</li>
+                                    <a href="/chat?dialog=true"><li>Open Chat</li></a>
+                                    <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
                                     <li>Earn Snapcash</li>
                                 </ul>
                             </div>
