@@ -12,7 +12,9 @@ export class MapContainer extends Component{
             showingInfoWindow: false,
             activeMarker : {},
             selectedPlace : {},
-            markerData: []
+            apiDataFetched: false,
+            markerData: [],
+            showDialog: false
         }
         this.blueDotIcon = {
             url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
@@ -29,12 +31,34 @@ export class MapContainer extends Component{
         }
         this.buyerInfo = [];
     }
-    onMarkerClick= (props,marker, e) =>
+
+    getNearbyUsers (currLat, currLng, recentPurchasedUser, radius_km){
+        let google = window.google;
+        let add_curr_usr_latlng = new google.maps.LatLng(currLat, currLng);
+        let nearByUserIds = [];
+        for(let i = 0 ;i < recentPurchasedUser.length; i++){
+            let marker_latlng = new google.maps.LatLng(recentPurchasedUser[i].lat , recentPurchasedUser[i].long);
+            let distanceFrmCurrUser = google.maps.geometry.spherical.computeDistanceBetween(add_curr_usr_latlng, marker_latlng);
+            if(distanceFrmCurrUser <= radius_km *1000){
+                nearByUserIds.push(recentPurchasedUser[i]._id);
+            }
+        }
+    }
+    componentDidUpdate(prevProp){
+        if(!this.state.showDialog && this.props.location.hash.includes('modal')){
+            this.setState({
+                showDialog: true
+            })
+        }
+        this.getNearbyUsers(28.402184051069632,77.10499718785287, this.state.markerData , 10);
+    }
+    onMarkerClick= (props,marker, e) =>{
+        if(!props.currentUsr)
         this.setState({
             showingInfoWindow: true,
             activeMarker : marker,
             selectedPlace : props
-        })
+        })}
     
     onInfoWindowClose = () =>
     this.setState({
@@ -85,10 +109,11 @@ export class MapContainer extends Component{
         this.setState({
             markerData: userData
         })
-
     }
     
     getUserInitials(fullName){
+        if(fullName === undefined)
+            return;
         let names = fullName.split(' ');
         let initials = '';
         names.forEach((item)=>{
@@ -98,6 +123,9 @@ export class MapContainer extends Component{
     }
 
     render(){
+        if(this.state.markerData === undefined){
+            return;
+        }
         return (<div >
             <Map className='map-container'
                 google={this.props.google}
@@ -110,29 +138,28 @@ export class MapContainer extends Component{
                  >
                 <Marker
                     onClick={this.onMarkerClick}
-                    name={"Chat With kshitiz rohatgi"}
-                    label={this.getUserInitials("kshitiz rohatgi")}
                     icon={this.blueDotIcon}
+                    currentUsr = {true}
+                    position ={{
+                        lat: 28.408561189492,
+                        lng: 77.08244685083629
+                      }}
                 />
                 {this.setNearbyBuyer()}
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
-                    {/* <div className="infomarker">
-                        <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
-                        <a href="#" className="chat-with-user">{this.state.selectedPlace.name}</a>
-                    </div> */}
                     <div className="informarker">
                         <div className="markerbox">
-                            <div className="infomarker__initial">{this.getUserInitials("Kshitiz rohatgi")}</div>
+                            <div className="infomarker__initial">{this.getUserInitials(this.state.selectedPlace.name)}</div>
                             <div className="informarker__userbox">
-                                <h3>Kshitiz Rohatgi</h3>
+                                <h3>{"Chat With " + this.state.selectedPlace.name}</h3>
                                 <p><span>Rating:</span> 5 Star </p>
                             </div>
                         </div>
                         <div className="infomarker__footer">
                                 <ul>
-                                    <a href="/chat"><li>Open Chat</li></a>
-                                    <li>View Product</li>
-                                    <li>Earn Snapcash</li>
+                                    <a href="/chat?dialog=true"><li>Open Chat</li></a>
+                                    <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
+                                    <a href="/earnHelp"><li>Earn Snapcash</li></a>
                                 </ul>
                             </div>
                     </div>
@@ -155,6 +182,8 @@ export class MapContainer extends Component{
                     onClick={this.onMarkerClick}
                     name={buyerInfo[i].name}
                     position= {position}
+                    label = {this.getUserInitials(buyerInfo[i].name)}
+                    key ={i}
                 />)
             }
             return markers
@@ -167,8 +196,10 @@ const LoadingContainer = (props) => (
   )
 
 export default GoogleApiWrapper({
-    apiKey: "",
-    LoadingContainer: LoadingContainer
+    apiKey: '',
+    LoadingContainer: LoadingContainer,
+    libraries: ['geometry']
   })(MapContainer);
 
   //AIzaSyCJBz1DbCiMqOqiB6SMVMXnNfLtXBJz5QU
+  //
