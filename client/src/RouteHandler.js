@@ -4,7 +4,8 @@ import {
   Route
 } from "react-router-dom";
 import Chat from "./pages/chat/chat";
-import MapContainer from './pages/map/MapContainer';
+import MapContainer from "./pages/map/MapContainer"
+import Notification from "./pages/notification/notification";
 
 export class RouteHandler extends Component {
 
@@ -19,6 +20,10 @@ export class RouteHandler extends Component {
                     <Route
                         path="/Chat"
                         component={Chat}
+                    />
+                    <Route
+                        path="/notification"
+                        component={Notification}
                     />
                 </Switch>
 		)

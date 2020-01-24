@@ -28,9 +28,7 @@ const io = socketio(server);
 
 
 io.on('connection', function(socket){
-    console.log('a user connected');
-    socket.emit('chat', 'Connected');
-    socket.on('disconnect', function(){
-      console.log('user disconnected');
+    socket.on('chatsend', data => {
+        socket.broadcast.emit('chatmsg', data);
     });
-  });
+});
