@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import queryString from 'query-string';
 import './chat.css';
 import { updateSnapcash} from '../../api';
 export default class Chat extends Component {
@@ -15,8 +16,21 @@ export default class Chat extends Component {
         this.sendMesage = this.sendMesage.bind(this);
         this.deductSnapCash = this.deductSnapCash.bind(this);
         this.setUserDetails();
+        const {pogId , userId, buyerId} = this.getParams(this.props)
+        this.pogId = pogId;
+        this.currUserId = userId;
+        this.buyerId = buyerId;
+        this.userName = this.currUserId ?  JSON.parse(window.localStorage.getItem('buyerInfo')).name:JSON.parse(window.localStorage.getItem('userInfo')).name;
     }
 
+    getParams(props){
+        let params={};
+        if(props){
+            let url = this.props.location.search;
+            params = queryString.parse(url);
+        }
+        return params;
+    }
     componentDidMount() {
         window.Socket.on('chatmsg', data => {
             this.setState({ 
@@ -30,6 +44,7 @@ export default class Chat extends Component {
                 ]
             });
         });
+        
     }
     sendMesage(e){
         this.setState({
@@ -68,6 +83,8 @@ export default class Chat extends Component {
         this.setState({
             showDialog: false
         })
+    componentWillUnmount(){
+        window.localStorage.clear();
     }
     render() {
         let html;
@@ -83,7 +100,7 @@ export default class Chat extends Component {
         </div> ;
         }else{
             html = <div className="chat">
-            <h3>You are now chatting with SamVsCode</h3>
+            <h3>You are now chatting with {this.userName}</h3>
             <ul className="chat__list">
             {this.state.msgs.map((msg, i) =>
                 msg.type === "my" ? <li key={i} className="chat__list__item chat__list__item--mymsg">

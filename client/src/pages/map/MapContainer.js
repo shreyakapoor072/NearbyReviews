@@ -56,7 +56,7 @@ export class MapContainer extends Component{
                 return item;
             }
         })
-        window.localStorage.setItem('buyerInfo', JSON.stringify(buyerData));
+        window.localStorage.setItem('buyerInfo', JSON.stringify(buyerData.length > 0 && buyerData[0]));
     }
     
     onInfoWindowClose = () =>
@@ -160,12 +160,12 @@ export class MapContainer extends Component{
                             <div className="infomarker__initial">{this.getUserInitials(this.state.selectedPlace.name)}</div>
                             <div className="informarker__userbox">
                                 <h3>{"Chat With " + this.state.selectedPlace.name}</h3>
-                                <p><span>Rating:</span> 5 Star </p>
+                                <p><span>Likes:</span> 5 </p>
                             </div>
                         </div>
                         <div className="infomarker__footer">
                                 <ul>
-                                    <a href={`/chat?dialog=true&pogId=${this.pogId}&userId=${this.state.currUserData.userId}`}><li>Open Chat</li></a>
+                                    <a href={`/chat?dialog=true&pogId=${this.pogId}&userId=${this.state.currUserData.userId}&buyerId=${this.state.selectedPlace.userId}`}><li>Open Chat</li></a>
                                     <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
                                     <a href="/earnHelp"><li>Earn Snapcash</li></a>
                                 </ul>
