@@ -4,7 +4,6 @@ import { fetchUser, fetchRecentBuyers } from '../../api';
 import queryString from 'query-string';
 
 import './map.css';
-
 export class MapContainer extends Component{
     constructor(props){
         super(props);
@@ -12,7 +11,8 @@ export class MapContainer extends Component{
         this.state ={
             showingInfoWindow: false,
             activeMarker : {},
-            selectedPlace : {}
+            selectedPlace : {},
+            apiDataFetched: false
         }
         this.blueDotIcon = {
             url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
@@ -28,6 +28,26 @@ export class MapContainer extends Component{
           this.bounds.extend(this.points[i]);
         }
         this.buyerInfo = [];
+    }
+
+    getNearbyUsers (currLat, currLng, recentPurchasedUser, radius_km){
+        let google = window.google;
+        let add_curr_usr_latlng = new google.maps.LatLng(currLat, currLng);
+        let nearByUserIds = [];
+        for(let i = 0 ;i < recentPurchasedUser.length; i++){
+            let marker_latlng = new google.maps.LatLng(recentPurchasedUser[i].lat , recentPurchasedUser[i].long);
+            let distanceFrmCurrUser = google.maps.geometry.spherical.computeDistanceBetween(add_curr_usr_latlng, marker_latlng);
+            if(distanceFrmCurrUser <= radius_km *1000){
+                nearByUserIds.push(recentPurchasedUser[i]._id);
+            }
+        }
+        console.log(nearByUserIds);
+    }
+    componentDidUpdate(){
+        if(this.state.apiDataFetched){
+            this.getNearbyUsers(28.402184051069632,77.10499718785287, this.recentPurchasedUser , 10);
+            this.setState({apiDataFetched: false});
+        }
     }
     onMarkerClick= (props,marker, e) =>
         this.setState({
@@ -64,6 +84,7 @@ export class MapContainer extends Component{
         const pogId = '675147979657'
          fetchRecentBuyers(pogId).then(data => {
              console.log(data);
+             this.setState({apiDataFetched:true});
          })
     }
     
@@ -96,7 +117,7 @@ export class MapContainer extends Component{
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
                     <div>
                         <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
-                        <a href="#" class="chat-with-user">{this.state.selectedPlace.name}</a>
+                        <a href="#" className="chat-with-user">{this.state.selectedPlace.name}</a>
                     </div>
                 </InfoWindow>
             </Map>
@@ -121,8 +142,10 @@ const LoadingContainer = (props) => (
   )
 
 export default GoogleApiWrapper({
-    apiKey: "",
-    LoadingContainer: LoadingContainer
+    apiKey: '',
+    LoadingContainer: LoadingContainer,
+    libraries: ['geometry']
   })(MapContainer);
 
   //AIzaSyCJBz1DbCiMqOqiB6SMVMXnNfLtXBJz5QU
+  //
