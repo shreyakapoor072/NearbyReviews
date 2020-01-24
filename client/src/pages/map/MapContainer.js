@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
-import { fetchUser, fetchRecentBuyers } from '../../api';
+import { fetchUser, fetchRecentBuyers, fetchUsers } from '../../api';
 import queryString from 'query-string';
 
 import './map.css';
@@ -8,7 +8,7 @@ import './map.css';
 export class MapContainer extends Component{
     constructor(props){
         super(props);
-        this.setParams(props);
+        //this.setParams(props);
         this.state ={
             showingInfoWindow: false,
             activeMarker : {},
@@ -51,20 +51,51 @@ export class MapContainer extends Component{
     };
 
     setParams(props){
-        this.params={};
+        let params={};
         if(props){
             let url = this.props.location.search;
-            this.params = queryString.parse(url);
+            params = queryString.parse(url);
         }
-        console.log(this.params)
+        console.log(params);
+        return params;
     }
 
     componentDidMount() {
         //fetch pog id from url remove this hardcoded one
-        const pogId = '675147979657'
-         fetchRecentBuyers(pogId).then(data => {
-             console.log(data);
-         })
+        const { pogId, userId } = this.setParams(this.props);
+
+       /* fetchRecentBuyers(pogId).then((data) => {
+            let usersIds = data;
+            if(usersIds.indexOf(parseInt(userId)) === -1){ 
+                usersIds.push(parseInt(userId));
+            }
+            fetchUsers().then(userData => {
+                
+            })
+        })*/
+
+       
+
+    }
+
+    async getRecentBuyers() {
+        const { pogId, userId } = this.setParams(this.props);
+        let userIds;
+       await fetchRecentBuyers(pogId).then( data => {
+           userIds = data
+        })
+
+        if(userIds.indexOf(userId) === -1){
+            userIds.push(userId);
+        }
+
+        fetchUsers().then(data => {
+            console.log(data);
+        })
+
+
+
+        console.log(userIds)
     }
     
    
