@@ -196,3 +196,43 @@ button span{
     background-color: #8C82FC;
     color: #fff;
 }
+.rating{
+    width: 400px;
+    height: 400px;
+    background-color: #fff;
+}
+.rating{
+    font-size: 12px;
+    width: 100%;
+    height: 100vh;
+    color: #444;
+}
+.rating h1{
+    font-size: 16px;
+    text-align: center;
+}
+.rating-body h3{
+    font-size: 14px;
+}
+.rating-body{
+    width: 100%;
+    padding: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.ratingbtns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 8px;
+}
+.ratingbtns button{
+    font-size: 8px;
+}
+.btnclose{
+    text-align: center;
+    margin: 0px auto;
+    margin-top: 30px;
+}

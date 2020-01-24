@@ -45,9 +45,15 @@ router.put('/snapcash/:rid/:uid', (req,res) => {
             }
         }).then(() => res.json({status: 'true'}));
     })
+});
 
-    
-})
+router.put('/rating/:id', (req,res) => {
+    const id = req.params.id;
+    Users.findOneAndUpdate({userId: id}, {$set : {likes: req.body.likes}}, function(err, user){
+        if(err) console.log("error");
+        res.json({success: true});
+    });
+});
 
 
 module.exports = router;

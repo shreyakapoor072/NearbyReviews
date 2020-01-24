@@ -94,7 +94,7 @@ export class MapContainer extends Component{
            userIds = data
         })
         userIds = userIds.filter(item=>{
-            if(item.userId !== parseInt(currUserId)){
+            if(item !== parseInt(currUserId)){
                 return item;
             }
         })
@@ -160,7 +160,7 @@ export class MapContainer extends Component{
                             <div className="infomarker__initial">{this.getUserInitials(this.state.selectedPlace.name)}</div>
                             <div className="informarker__userbox">
                                 <h3>{"Chat With " + this.state.selectedPlace.name}</h3>
-                                <p><span>Likes:</span> 5 </p>
+                                <p><span>Likes:</span> {this.state.selectedPlace.likes} </p>
                             </div>
                         </div>
                         <div className="infomarker__footer">
@@ -193,6 +193,7 @@ export class MapContainer extends Component{
                     label = {this.getUserInitials(buyerInfo[i].name)}
                     key ={i}
                     userId = {buyerInfo[i].userId}
+                    likes = {buyerInfo[i].likes}
                 />)
             }
             return markers

@@ -45,3 +45,11 @@ export const updateSnapcash = function(data) {
         return {status: true};
     })
 }
+
+export const findByIdAndUpdateLikes = function(userid, likes){
+    return axios.put(`/users/rating/${userid}`, {likes}).then(result => {
+        return result
+    }).catch(() => {
+        return {status: false};
+    });
+}
