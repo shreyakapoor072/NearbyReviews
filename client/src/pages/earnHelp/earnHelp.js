@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import "./earnHelp.scss"
-import { Redirect } from "react-router-dom";
-import queryString from 'query-string';
 
 class EarnHelp extends Component {
 	constructor(props) {
@@ -36,19 +34,10 @@ class EarnHelp extends Component {
                     ]
                 }
     }
-    
-    setParams(props){
-        let params={};
-        if(props){
-            let url = this.props.location.search;
-            params = queryString.parse(url);
-        }
-        return params;
-    }
+
 
     onBackClick(){
-        const { pogId, userId } = this.setParams(this.props);
-        this.setState({redirectTo:"/Map?pogId="+pogId+"?userId="+userId})
+        window.history.back();
     }
 
 	parseDataAndRender() {
@@ -87,10 +76,6 @@ class EarnHelp extends Component {
 	}
 
 	render() {
-        let {redirectTo}=this.state;
-        if(redirectTo){
-            return <Redirect to ={redirectTo} />
-        }
 		return (
             <div className="helpTab">
                 <div className="header">
