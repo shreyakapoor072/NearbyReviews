@@ -32,3 +32,9 @@ export const fetchRecentBuyers = function(pogid) {
         console.warn(e);
     })
 }
+
+export const updateSnapcash = function(data) {
+    console.log(data);
+    const { userId, buyerId } = data;
+    return axios.put(`/users/${userId}`);
+}

@@ -27,8 +27,15 @@ router.post('/',(req,res)=>{
 
 router.put('/:id', (req,res) => {
     const id = req.params.id;
-    Users.findByIdAndUpdate({_id:id}, {snapcash: req.body.snapcash}, function(err, item){
-        if (err) console.log("error");
+    
+    Users.findByIdAndUpdate({userId: id}, {snapcash: req.body.snapcash}, function(err, user){
+        if (err) { 
+            console.log("error"); 
+        } else {
+            console.log(user);
+        }
+
+
     })
 })
 

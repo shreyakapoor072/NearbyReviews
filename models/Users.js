@@ -23,7 +23,7 @@ const userSchema = Schema({
     snapcash: {
         type: Number
     },
-    rating: {
+    likes: {
         type: Number
     },
     pincode: {
