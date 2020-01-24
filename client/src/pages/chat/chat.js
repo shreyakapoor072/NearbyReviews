@@ -13,9 +13,10 @@ export default class Chat extends Component {
         }
         this.textarea = "";
         this.sendMesage = this.sendMesage.bind(this);
-        const {pogId , userId } = this.getParams(this.props)
+        const {pogId , userId, buyerId} = this.getParams(this.props)
         this.pogId = pogId;
         this.currUserId = userId;
+        this.buyerId = buyerId;
         this.userName = this.currUserId ?  JSON.parse(window.localStorage.getItem('buyerInfo')).name:JSON.parse(window.localStorage.getItem('userInfo')).name;
     }
 
@@ -54,7 +55,6 @@ export default class Chat extends Component {
         this.textarea.value = "";
     }
     componentWillUnmount(){
-        console.log('hello');
         window.localStorage.clear();
     }
     render() {

@@ -165,7 +165,7 @@ export class MapContainer extends Component{
                         </div>
                         <div className="infomarker__footer">
                                 <ul>
-                                    <a href={`/chat?dialog=true&pogId=${this.pogId}&userId=${this.state.currUserData.userId}`}><li>Open Chat</li></a>
+                                    <a href={`/chat?dialog=true&pogId=${this.pogId}&userId=${this.state.currUserData.userId}&buyerId=${this.state.selectedPlace.userId}`}><li>Open Chat</li></a>
                                     <a href="https://m.snapdeal.com/product/x/622934948144"><li>View Product</li></a>
                                     <a href="/earnHelp"><li>Earn Snapcash</li></a>
                                 </ul>
