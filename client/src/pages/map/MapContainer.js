@@ -14,22 +14,14 @@ export class MapContainer extends Component{
             selectedPlace : {},
             apiDataFetched: false,
             markerData: [],
-            showDialog: false
+            showDialog: false,
+            currUserData: {}
         }
         this.blueDotIcon = {
             url: 'https://n1h2.sdlcdn.com/imgs/b/f/c/ug_localization_1579784498734.png'
         }
-        this.points = [
-            { lat: 42.02, lng: -77.01 },
-            { lat: 42.03, lng: -77.02 },
-            { lat: 41.03, lng: -77.04 },
-            { lat: 42.05, lng: -77.02 }
-        ]
-        this.bounds = new this.props.google.maps.LatLngBounds();
-        for (var i = 0; i < this.points.length; i++) {
-          this.bounds.extend(this.points[i]);
-        }
         this.buyerInfo = [];
+        this.radius = 10;
     }
 
     getNearbyUsers (currLat, currLng, recentPurchasedUser, radius_km){
@@ -50,7 +42,7 @@ export class MapContainer extends Component{
                 showDialog: true
             })
         }
-        this.getNearbyUsers(28.402184051069632,77.10499718785287, this.state.markerData , 10);
+        this.getNearbyUsers(this.state.currUserData.lat,this.state.currUserData.long, this.state.markerData , this.radius);
     }
     onMarkerClick= (props,marker, e) =>{
         if(!props.currentUsr)
@@ -88,26 +80,29 @@ export class MapContainer extends Component{
     }
 
     async getRecentBuyers() {
-        const { pogId, userId } = this.setParams(this.props);
-        let userIds, userData;
+        const { pogId, userId : currUserId } = this.setParams(this.props);
+        let userIds, userData, currUserData;
        await fetchRecentBuyers(pogId).then( data => {
            userIds = data
         })
 
-        if(userIds && userIds.indexOf(parseInt(userId)) === -1){
-            userIds.push(userId);
-        }
-
         await fetchUsers().then(userInfo => {
             userData = userInfo.filter(item => {
                 if(userIds && userIds.indexOf(item.userId) !== -1) {
-                    return item
+                    return item;
+                }
+            })
+            currUserData = userInfo.filter(item=>{
+                if(parseInt(currUserId) === item.userId){
+                    return item;
                 }
             })
         })
        
+
         this.setState({
-            markerData: userData
+            markerData: userData, 
+            currUserData: currUserData && currUserData[0]
         })
     }
     
@@ -123,16 +118,16 @@ export class MapContainer extends Component{
     }
 
     render(){
-        if(this.state.markerData === undefined){
+        if(this.state.markerData === undefined ){
             return;
         }
         return (<div >
             <Map className='map-container'
                 google={this.props.google}
                 zoom={13}
-                initialCenter={{
-                    lat: 28.408561189492,
-                    lng: 77.08244685083629
+                center={{
+                    lat: this.state.currUserData.lat,
+                    lng: this.state.currUserData.long
                   }}
                   onClick={this.onMapClicked}
                  >
@@ -141,8 +136,8 @@ export class MapContainer extends Component{
                     icon={this.blueDotIcon}
                     currentUsr = {true}
                     position ={{
-                        lat: 28.408561189492,
-                        lng: 77.08244685083629
+                        lat: this.state.currUserData.lat,
+                        lng: this.state.currUserData.long
                       }}
                 />
                 {this.setNearbyBuyer()}
