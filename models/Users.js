@@ -20,6 +20,12 @@ const userSchema = Schema({
     long: {
         type: Number
     },
+    snapcash: {
+        type: Number
+    },
+    rating: {
+        type: Number
+    },
     pincode: {
         type: Number
     }

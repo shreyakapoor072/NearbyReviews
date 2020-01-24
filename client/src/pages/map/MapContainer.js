@@ -3,7 +3,6 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { fetchRecentBuyers, fetchUsers } from '../../api';
 import queryString from 'query-string';
 import './map.css';
-import { userInfo } from 'os';
 
 export class MapContainer extends Component{
     constructor(props){
@@ -89,7 +88,6 @@ export class MapContainer extends Component{
 
     }
     
-   
     getUserInitials(fullName){
         let names = fullName.split(' ');
         let initials = '';
