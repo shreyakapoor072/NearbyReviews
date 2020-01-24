@@ -6,6 +6,7 @@ import {
 import Chat from "./pages/chat/chat";
 import MapContainer from "./pages/map/MapContainer"
 import Notification from "./pages/notification/notification";
+import EarnHelp from "./pages/earnHelp/earnHelp"
 
 export class RouteHandler extends Component {
 
@@ -24,6 +25,10 @@ export class RouteHandler extends Component {
                     <Route
                         path="/notification"
                         component={Notification}
+                    />
+                    <Route
+                        path="/earnHelp"
+                        component={EarnHelp}
                     />
                 </Switch>
 		)
