@@ -83,6 +83,7 @@ export default class Chat extends Component {
         this.setState({
             showDialog: false
         })
+    }
     componentWillUnmount(){
         window.localStorage.clear();
     }
