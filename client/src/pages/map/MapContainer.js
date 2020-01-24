@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 import { fetchRecentBuyers, fetchUsers } from '../../api';
 import queryString from 'query-string';
-
 import './map.css';
 import { userInfo } from 'os';
 
@@ -119,9 +118,25 @@ export class MapContainer extends Component{
                 />
                 {this.setNearbyBuyer()}
                 <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}  onClose={this.onInfoWindowClose}>
-                    <div>
+                    {/* <div className="infomarker">
                         <img src="https://n1h2.sdlcdn.com/imgs/b/f/c/ug_chat-bubble_24px_1579784165386.png"></img>
-                        <a href="#" class="chat-with-user">{this.state.selectedPlace.name}</a>
+                        <a href="#" className="chat-with-user">{this.state.selectedPlace.name}</a>
+                    </div> */}
+                    <div className="informarker">
+                        <div className="markerbox">
+                            <div className="infomarker__initial">{this.getUserInitials("Kshitiz rohatgi")}</div>
+                            <div className="informarker__userbox">
+                                <h3>Kshitiz Rohatgi</h3>
+                                <p><span>Rating:</span> 5 Star </p>
+                            </div>
+                        </div>
+                        <div className="infomarker__footer">
+                                <ul>
+                                    <a href="/chat"><li>Open Chat</li></a>
+                                    <li>View Product</li>
+                                    <li>Earn Snapcash</li>
+                                </ul>
+                            </div>
                     </div>
                 </InfoWindow>
             </Map>

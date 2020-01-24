@@ -76,8 +76,15 @@
 .header ul li:first-child{
     font-size: 12px;
     font-weight: normal;
+    margin-right: 10px;
+    justify-self: flex-start;
 }
 .header ul li{
     font-size: 18px;
     font-weight: bold;
+    color: #fff;
+}
+.header ul li a{
+    color: #fff;
+    text-decoration: none;
 }
