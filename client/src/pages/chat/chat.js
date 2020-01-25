@@ -119,12 +119,15 @@ export default class Chat extends Component {
                 <div className="rating-body">
                     <h3>Click below on any button to rate your experience with the user</h3>
                     <div className="ratingbtns">
-                        <button onClick={(e) => {
+                        <button className="yeybtn" onClick={(e) => {
                             findByIdAndUpdateLikes(this.buyerId, this.buyer.likes + 1).then(result => {
                                 console.log(result);
                                 window.location.href = `https://m.snapdeal.com/product/x/${this.pogId}`;
                             });
                         }}>Yey</button>
+                        <button className="nopebtn" onClick={(e) => {
+                            window.location.href = `https://m.snapdeal.com/product/x/${this.pogId}`;
+                        }}>Nope</button>
                     </div>
                 </div>
             </div>
@@ -157,6 +160,11 @@ export default class Chat extends Component {
                     <div className="chat-message clearfix">
                         <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="2" ref={textval => this.textarea = textval}></textarea>
                         <button onClick={this.sendMesage}>Send</button>
+                        {this.buyer ? <button className="btn-close" onClick={() =>{
+                            this.setState({
+                                showRating: true
+                            });
+                        }}>close</button> :""}
                     </div>
                 </div>
             </div>

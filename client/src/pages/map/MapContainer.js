@@ -206,7 +206,7 @@ const LoadingContainer = (props) => (
   )
 
 export default GoogleApiWrapper({
-    apiKey: '',
+    apiKey: 'AIzaSyCJBz1DbCiMqOqiB6SMVMXnNfLtXBJz5QU',
     LoadingContainer: LoadingContainer,
     libraries: ['geometry']
   })(MapContainer);

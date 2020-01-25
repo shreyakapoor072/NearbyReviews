@@ -236,3 +236,12 @@ button span{
     margin: 0px auto;
     margin-top: 30px;
 }
+.yeybtn{
+    background-color: rgb(128, 243, 20);
+    color: #fff;
+    font-weight: bold;
+}
+.nopebtn{
+    background-color: rgb(245, 105, 100);
+    color: #fff;
+}
